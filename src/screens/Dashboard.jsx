@@ -3,7 +3,7 @@ import MainContent from "../Layout/MainContent";
 
 function Dashboard() {
   return (
-    <div className="h-full p-4 flex">
+    <div className="h-screen flex bg-[#f4f8fc]">
       <Sidebar />
       <MainContent/>
     </div>

@@ -1,9 +1,9 @@
 function Sidebar() {
   return (
-    <aside className="bg-[#f6f8fc] h-full w-70 rounded-l-xl border-r border-gray-200 flex flex-col p-4">
-      <header className="text-center font-semibold text-xl">Task Flow</header>
+    <aside className="w-70 rounded-l-xl border-r border-gray-200 flex flex-col p-5">
+      <header className="font-extralight text-3xl">Task Flow</header>
     </aside>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

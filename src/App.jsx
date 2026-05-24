@@ -2,8 +2,8 @@ import Dashboard from "./screens/Dashboard";
 
 function App() {
   return (
-    <div className="h-screen bg-gray-200">
-        <Dashboard />
+    <div className="h-screen">
+      <Dashboard />
     </div>
   );
 }
