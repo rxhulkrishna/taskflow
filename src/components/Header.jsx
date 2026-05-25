@@ -1,7 +1,10 @@
-function Header() {
+function Header({noOfTasks}) {
   return <div>
     <h1 className="text-3xl font-medium">Good Morning, Rahul 👋</h1>
-    <span className="text-gray-500 text-sm">You have 8 tasks to complete today.</span>
+    {noOfTasks > 0 
+    ? <span className="text-gray-500 text-sm">You have {noOfTasks} {noOfTasks > 1 ? 'tasks' : 'task'} to complete today.</span>
+    : <span className="text-gray-500 text-sm">No tasks to complete.</span>
+  }
   </div>;
 }
 

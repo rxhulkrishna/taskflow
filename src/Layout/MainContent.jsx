@@ -6,10 +6,11 @@ import TaskList from "../components/TaskList";
 
 function MainContent() {
   const [tasks, setTasks] = useState([]);
+  const noOfTasks = tasks.length;
 
   return (
     <main className="flex-1 flex flex-col rounded-r-xl gap-6 p-6 overflow-hidden">
-      <Header />
+      <Header noOfTasks={noOfTasks}/>
 
       <div className="flex flex-1 min-h-0 gap-6">
         <section className="flex-1 flex flex-col min-h-0">
