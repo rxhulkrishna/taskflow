@@ -1,10 +1,15 @@
 import TaskCard from "./TaskCard";
 
-function TaskList({tasks}) {
+function TaskList({ tasks, onToggleTask, onDeleteTask }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {tasks.map((item) => (
-        <TaskCard task={item} key={item.id} />
+        <TaskCard
+          onToggle={() => onToggleTask(item.id)}
+          task={item}
+          key={item.id}
+          onDelete={() => onDeleteTask(item.id)}
+        />
       ))}
     </div>
   );

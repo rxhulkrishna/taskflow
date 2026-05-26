@@ -14,14 +14,15 @@ function SelectionButton({ title, icon, options, selected, onSelection }) {
   if (!options) return;
   return (
     <div className="flex gap-6 items-center text-gray-500">
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center w-20">
         <i>{icon}</i>
-        <span class="text-sm">{title}</span>
+        <span className="text-sm">{title}</span>
       </div>
       <div className="flex gap-4">
         {options.map((option) => (
           <button
-            key="option"
+            key={option}
+            type="button"
             className={`${btnStyle} ${selected === option ? "bg-blue-100" : ""}`}
             onClick={(e) => _handleClick(e, option)}
           >

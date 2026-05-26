@@ -1,13 +1,51 @@
-function TaskCard({ task }) {
-  const due = task.dueDate.split(",")[0];
+import { Calendar, Trash } from "lucide-react";
+
+function TaskCard({ task, onToggle, onDelete }) {
+  function getPriorityStyles() {
+    if (task.priority === "High") {
+      return "bg-red-100 text-red-500";
+    }
+    if (task.priority === "Medium") {
+      return "bg-yellow-100 text-yellow-500";
+    }
+    if (task.priority === "Low") {
+      return "bg-green-100 text-green-500";
+    }
+    return "bg-gray-100 text-gray-500";
+  }
+
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-4">
-      <h3 className={`text-lg ${task.completed ? 'line-through' : ''}`}>{task.title}</h3>
-      <div className="flex gap-2">
-        <span className="text-sm text-gray-500">{due}</span>
-        {task.category ? <span className="text-sm text-gray-500">#{task.category}</span> : ''}
-        {task.priority ? <span className="text-sm text-gray-500">#{task.priority}</span> : ''}
+    <div className="group bg-white border border-gray-200 rounded-2xl shadow-md p-6 flex items-center gap-6 w-full transition hover:opacity-80">
+      <input
+        className="size-5"
+        type="checkbox"
+        checked={task.completed}
+        onChange={() => onToggle()}
+      />
+      <div className="flex flex-col gap-3">
+        <h3
+          className={`transition group-hover:text-blue-600 text-lg font-semibold ${task.completed ? "line-through" : ""}`}
+        >
+          {task.title}
+        </h3>
+        <div className="flex gap-4 text-sm text-gray-500 items-center">
+          <div className="flex gap-1 items-center">
+            <Calendar size="16" />
+            <span>{task.dueDate}</span>
+          </div>
+          {task.category && <span>#{task.category}</span>}
+        </div>
       </div>
+      {task.priority && (
+        <span
+          className={`text-sm text-gray-500 ml-auto px-3 py-1 rounded-md ${getPriorityStyles()}`}
+        >
+          {task.priority}
+        </span>
+      )}
+      <button type="button" onClick={() => onDelete()}>
+        <Trash size="18" />
+      </button>
     </div>
   );
 }
