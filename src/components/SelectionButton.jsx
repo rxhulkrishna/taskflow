@@ -2,7 +2,7 @@ const btnStyle =
   "border border-gray-200 text-sm text-gray-500 rounded-full p-2 hover:bg-blue-100 transition";
 
 function SelectionButton({ title, icon, options, selected, onSelection }) {
-  function _handleClick(e, option) {
+  function handleClick(e, option) {
     e.preventDefault();
     if (selected === option) {
       onSelection("");
@@ -24,7 +24,7 @@ function SelectionButton({ title, icon, options, selected, onSelection }) {
             key={option}
             type="button"
             className={`${btnStyle} ${selected === option ? "bg-blue-100" : ""}`}
-            onClick={(e) => _handleClick(e, option)}
+            onClick={(e) => handleClick(e, option)}
           >
             {option}
           </button>

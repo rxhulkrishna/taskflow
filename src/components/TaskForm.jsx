@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SelectionButton from "./SelectionButton";
 import { Flag, Plus, Tag } from "lucide-react";
+import { options, dateOptions } from "../constants/constants";
 
 const initialTask = {
   title: "",
@@ -9,21 +10,10 @@ const initialTask = {
   dueDate: "",
 };
 
-const options = {
-  category: ["Work", "Shopping", "Fitness", "Study"],
-  priority: ["High", "Medium", "Low"],
-};
-
-const dateOptions = {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-};
-
 function TaskForm({ addTasks }) {
   const [formData, setFormData] = useState(initialTask);
 
-  function _handleTitleChange(e) {
+  function handleTaskTitle(e) {
     const targetValue = e.target.value;
     setFormData((prevFormData) => ({ ...prevFormData, title: targetValue }));
   }
@@ -36,7 +26,7 @@ function TaskForm({ addTasks }) {
     setFormData((prevFormData) => ({ ...prevFormData, priority: value }));
   }
 
-  function _formSubmit(e) {
+  function formSubmit(e) {
     e.preventDefault();
     if (formData.title.trim() === "") {
       return;
@@ -57,15 +47,15 @@ function TaskForm({ addTasks }) {
 
   return (
     <form
-      className="bg-white w-full flex flex-col gap-4 p-4 border border-gray-200 rounded-xl shadow-md"
-      onSubmit={_formSubmit}
+      className="bg-white w-full flex flex-col gap-4 p-4 rounded-xl shadow-md"
+      onSubmit={formSubmit}
     >
       <input
         className="border border-gray-200 p-4 pb-12 outline-none rounded-xl"
         type="text"
         placeholder="What do you want to accomplish?"
         value={formData.title}
-        onChange={_handleTitleChange}
+        onChange={handleTaskTitle}
       />
       <div className="flex flex-row justify-between gap-4 items-center">
         <div className="flex flex-col justify-start gap-4">

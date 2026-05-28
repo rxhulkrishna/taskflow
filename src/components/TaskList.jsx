@@ -1,6 +1,14 @@
 import TaskCard from "./TaskCard";
+import { emptyMessage } from "../constants/constants";
 
-function TaskList({ tasks, onToggleTask, onDeleteTask }) {
+function TaskList({ tasks, onToggleTask, onDeleteTask, filterStatus }) {
+  if (tasks.length === 0) {
+    return (
+      <span className="text-sm text-gray-500">
+        {emptyMessage[filterStatus]}
+      </span>
+    );
+  }
   return (
     <div className="flex flex-col gap-4 w-full">
       {tasks.map((item) => (
