@@ -9,7 +9,7 @@ function FilterButtons({ filters, onFilterChange }) {
   }
 
   return (
-    <div className="flex gap-5 items-center justify-between">
+    <div className="flex flex-col lg:flex-row gap-5 items-center justify-between">
       <div className="flex bg-indigo-100 w-max rounded-xl text-sm h-10 items-center justify-center">
         <button
           onClick={() => handleFilter("all", "status")}
@@ -33,7 +33,7 @@ function FilterButtons({ filters, onFilterChange }) {
           Completed
         </button>
       </div>
-      <div className="flex items-center gap-5 text-sm text-gray-700">
+      <div className="w-full lg:w-max flex flex-col lg:flex-row lg:items-center gap-5 text-sm text-gray-700">
         <input
           className="bg-white px-4 py-2 rounded-xl outline-0"
           type="text"
@@ -42,6 +42,7 @@ function FilterButtons({ filters, onFilterChange }) {
         />
         <select
           className="bg-white px-4 py-2 rounded-xl"
+          value={filters.category}
           onChange={({ target }) => handleFilter(target.value, "category")}
         >
           <option value="all">Category</option>
@@ -53,6 +54,7 @@ function FilterButtons({ filters, onFilterChange }) {
         </select>
         <select
           className="bg-white px-4 py-2 rounded-xl"
+          value={filters.priority}
           onChange={({ target }) => handleFilter(target.value, "priority")}
         >
           <option value="all">Priority</option>

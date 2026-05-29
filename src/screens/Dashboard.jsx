@@ -3,7 +3,7 @@ import MainContent from "../Layout/MainContent";
 
 function Dashboard() {
   return (
-    <div className="h-screen flex bg-[#f7faff]">
+    <div className="h-screen flex bg-[#f7faff] lg:overflow-y-hidden">
       <Sidebar />
       <MainContent/>
     </div>

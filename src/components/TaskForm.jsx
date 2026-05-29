@@ -10,20 +10,16 @@ const initialTask = {
   dueDate: "",
 };
 
-function TaskForm({ addTasks }) {
-  const [formData, setFormData] = useState(initialTask);
+function TaskForm({ onAddTask, editTask, onEditTask }) {
+  const [formData, setFormData] = useState(editTask || initialTask);
 
-  function handleTaskTitle(e) {
-    const targetValue = e.target.value;
-    setFormData((prevFormData) => ({ ...prevFormData, title: targetValue }));
+  function handleChange(field, value) {
+    setFormData((prevFormData) => ({ ...prevFormData, [field]: value }));
   }
 
-  function onCategory(value) {
-    setFormData((prevFormData) => ({ ...prevFormData, category: value }));
-  }
-
-  function onPriority(value) {
-    setFormData((prevFormData) => ({ ...prevFormData, priority: value }));
+  function onCancel() {
+    onEditTask(null);
+    setFormData(initialTask);
   }
 
   function formSubmit(e) {
@@ -31,17 +27,26 @@ function TaskForm({ addTasks }) {
     if (formData.title.trim() === "") {
       return;
     }
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString("en-US", dateOptions);
-    const newTask = {
-      id: crypto.randomUUID(),
-      title: formData.title.trim(),
-      category: formData.category,
-      priority: formData.priority ? formData.priority : "Low",
-      completed: false,
-      dueDate: formattedDate,
-    };
-    addTasks((prevTasks) => [...prevTasks, newTask]);
+
+    if (editTask) {
+      onAddTask((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === editTask.id ? { ...task, ...formData } : task,
+        ),
+      );
+    } else {
+      const now = new Date();
+      const formattedDate = now.toLocaleDateString("en-US", dateOptions);
+      const newTask = {
+        id: crypto.randomUUID(),
+        title: formData.title.trim(),
+        category: formData.category,
+        priority: formData.priority ? formData.priority : "Low",
+        completed: false,
+        dueDate: formattedDate,
+      };
+      onAddTask((prevTasks) => [...prevTasks, newTask]);
+    }
     setFormData(initialTask);
   }
 
@@ -55,32 +60,45 @@ function TaskForm({ addTasks }) {
         type="text"
         placeholder="What do you want to accomplish?"
         value={formData.title}
-        onChange={handleTaskTitle}
+        onChange={({ target }) => handleChange("title", target.value)}
       />
-      <div className="flex flex-row justify-between gap-4 items-center">
+      <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
         <div className="flex flex-col justify-start gap-4">
           <SelectionButton
             title="Category"
             icon={<Tag size={18} />}
             options={options.category}
             selected={formData.category}
-            onSelection={onCategory}
+            onSelection={(value) => handleChange("category", value)}
           />
           <SelectionButton
             title="Priority"
             icon={<Flag size={18} />}
             options={options.priority}
             selected={formData.priority}
-            onSelection={onPriority}
+            onSelection={(value) => handleChange("priority", value)}
           />
         </div>
-        <button
-          className="w-35 border border-gray-200 rounded-md p-2 gap-2 bg-[#5750e4] text-white font-semibold self-end flex items-center justify-center"
-          type="submit"
-        >
-          <Plus size="18" />
-          Add Task
-        </button>
+        <div className="flex gap-2 text-sm lg:self-end">
+          <button
+            className="border border-gray-200 rounded-md p-2 gap-2 bg-[#5750e4] text-white font-semibold flex items-center w-max justify-center"
+            type="submit"
+          >
+            <Plus size="18" />
+            {editTask ? "Edit Task" : "Add Task"}
+          </button>
+          {editTask ? (
+            <button
+              className="border border-gray-200 rounded-md p-2 gap-2 bg-gray-500 text-white font-semibold flex items-center w-max justify-center"
+              type="button"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </form>
   );

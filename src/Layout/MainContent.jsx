@@ -6,12 +6,13 @@ import TaskList from "../components/TaskList";
 import FilterButtons from "../components/FilterButtons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { TASKS_PER_PAGE } from "../constants/constants";
+import { usePagination } from "../hooks/usePagination";
 
 const initialFilter = {
   status: "all",
   category: "all",
   priority: "all",
-  search: '',
+  search: "",
 };
 
 function getInitialTasks() {
@@ -22,7 +23,7 @@ function getInitialTasks() {
 function MainContent() {
   const [tasks, setTasks] = useState(getInitialTasks);
   const [filters, setFilters] = useState(initialFilter);
-  const [page, setPage] = useState(1);
+  const [editTask, setEditTask] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -36,21 +37,6 @@ function MainContent() {
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     );
-  }
-
-  function handleAddTasks(task) {
-    setTasks(task);
-    setFilters(initialFilter);
-  }
-
-  function handleDeleteTask(id) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  }
-
-  function handleFilterChange(newFilter) {
-    // if (filters === newFilter) return;
-    setFilters(newFilter);
-    setPage(1);
   }
 
   const analyticsData = {
@@ -74,48 +60,59 @@ function MainContent() {
         filters.priority === "all" || task.priority === filters.priority,
     )
     .filter(
-      (task) =>
-        filters.search === "" || task.title.includes(filters.search),
+      (task) => filters.search === "" || task.title.includes(filters.search),
     );
 
-  //PAGINATION
-  const startIdx = (page - 1) * TASKS_PER_PAGE;
-  const endIdx = startIdx + TASKS_PER_PAGE;
-  const currentPageTasks = filteredTasks.slice(startIdx, endIdx);
+  const { currentPageTasks, onPrev, onNext, resetPage, page } = usePagination(
+    filteredTasks,
+    TASKS_PER_PAGE,
+  );
 
-  function onPrev() {
-    if (page === 1) {
-      return;
+  function handleAddTasks(task) {
+    setTasks(task);
+    if (editTask) {
+      setEditTask(null);
     }
-    setPage((prevPage) => prevPage - 1);
+    setFilters(initialFilter);
   }
 
-  function onNext() {
-    const noOfPages = Math.ceil(filteredTasks.length / TASKS_PER_PAGE);
-    if (page === noOfPages || noOfPages === 0) {
-      return;
-    }
-    setPage((prevPage) => prevPage + 1);
+  function handleDeleteTask(id) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }
+
+  function handleEditTask(task) {
+    setEditTask(task);
+  }
+
+  function handleFilterChange(newFilter) {
+    setFilters(newFilter);
+    resetPage();
   }
 
   return (
-    <main className="flex-1 flex flex-col rounded-r-xl gap-6 p-6 overflow-hidden">
+    <main className="flex-1 flex flex-col rounded-r-xl gap-6 p-6 overflow-x-hidden lg:overflow-hidden">
       <Header noOfTasks={noOfTasks} />
 
-      <div className="flex flex-1 min-h-0 gap-6">
-        <section className="flex-1 flex flex-col min-h-0 gap-6">
-          <TaskForm addTasks={handleAddTasks} />
+      <div className="flex flex-col lg:flex-row flex-1 lg:min-h-0 gap-6">
+        <section className="flex-1 flex flex-col lg:min-h-0 gap-6">
+          <TaskForm
+            key={editTask?.id || "new"}
+            onAddTask={handleAddTasks}
+            editTask={editTask}
+            onEditTask={setEditTask}
+          />
 
           <FilterButtons
             filters={filters}
             onFilterChange={handleFilterChange}
           />
 
-          <div className="flex-1 pr-2 w-full">
+          <div className="flex-1 w-full">
             <TaskList
               tasks={currentPageTasks}
               onToggleTask={taskToggle}
               onDeleteTask={handleDeleteTask}
+              onEditTask={handleEditTask}
               filterStatus={filters.status}
             />
           </div>
@@ -133,7 +130,7 @@ function MainContent() {
           </div>
         </section>
 
-        <aside className="w-105 min-h-0">
+        <aside className="w-full lg:w-105 min-h-0">
           <Analytics data={analyticsData} />
         </aside>
       </div>

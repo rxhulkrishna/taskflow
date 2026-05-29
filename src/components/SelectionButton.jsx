@@ -13,12 +13,12 @@ function SelectionButton({ title, icon, options, selected, onSelection }) {
 
   if (!options) return;
   return (
-    <div className="flex gap-6 items-center text-gray-500">
+    <div className="flex gap-6 items-baseline text-gray-500">
       <div className="flex gap-2 items-center w-20">
         <i>{icon}</i>
         <span className="text-sm">{title}</span>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         {options.map((option) => (
           <button
             key={option}

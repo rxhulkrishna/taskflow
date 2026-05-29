@@ -1,7 +1,13 @@
 import TaskCard from "./TaskCard";
 import { emptyMessage } from "../constants/constants";
 
-function TaskList({ tasks, onToggleTask, onDeleteTask, filterStatus }) {
+function TaskList({
+  tasks,
+  onToggleTask,
+  onDeleteTask,
+  onEditTask,
+  filterStatus,
+}) {
   if (tasks.length === 0) {
     return (
       <span className="text-sm text-gray-500">
@@ -17,6 +23,7 @@ function TaskList({ tasks, onToggleTask, onDeleteTask, filterStatus }) {
           task={item}
           key={item.id}
           onDelete={() => onDeleteTask(item.id)}
+          onEdit={() => onEditTask(item)}
         />
       ))}
     </div>
